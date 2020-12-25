@@ -1,10 +1,7 @@
 /*
  Name:		ReactionTimer.ino
  Created:	12/24/2020 8:45:46 PM
- Author:	Martin
-*/
-/*
-    Martin Nohr 10/10/2020
+ Author:	Martin Nohr
 */
 #include <TFT_eSPI.h> // Hardware-specific library
 #include <SPI.h>
