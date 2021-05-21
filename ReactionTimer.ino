@@ -30,9 +30,8 @@ void setup()
 	tft.setTextWrap(false, false);
     tft.setCursor(0, tft.fontHeight());
     tft.println("");
-    tft.println("  Press and hold button");
-    tft.println("  Release when circle");
-    tft.println("      turns green");
+    tft.println("  Press when circle");
+    tft.println("    turns green");
     delay(1000);
 }
 
@@ -45,46 +44,58 @@ void loop()
     static int randomtime = 0;
     switch (state) {
     case 0: // wait for btn0
-        if (btn0 == 0) {
+        if (!btn0) {
             state = 1;
         }
         break;
-    case 1: // draw the red button
+    case 1: // wait for release
+        if (btn0) {
+            state = 2;
+        }
+        break;
+    case 2: // draw the red button
         tft.fillScreen(TFT_BLACK);
         tft.fillCircle(100, 50, 20, TFT_RED);
-        state = 2;
+        state = 3;
         start = millis();
         randomtime = random(1000, 5000);
         break;
-    case 2: // wait for random time
+    case 3: // wait for random time
         if (millis() > start + randomtime) {
             tft.fillCircle(100, 50, 20, TFT_GREEN);
             start = millis();
-            state = 3;
+            state = 4;
         }
         else {
-            if (btn0) {
-                state = 4;
+            if (!btn0) {
+                state = 5;
             }
         }
         break;
-    case 3: // wait for button release
-        if (btn0) {
+    case 4: // wait for button press
+        if (!btn0) {
             unsigned long final = millis();
             tft.fillScreen(TFT_BLACK);
-            state = 0;
+            state = 6;
             //tft.setRotation(0);
 			tft.setCursor(0, tft.fontHeight());
             tft.println("");
             tft.println("     TIME: " + String(final - start) + " mSec");
+            tft.println("\n    Press to start again");
+            delay(500);
         }
         break;
-    case 4: // cheat
+    case 5: // cheat
         tft.fillScreen(TFT_RED);
         state = 0;
         tft.setCursor(0, tft.fontHeight());
         tft.println("");
         tft.println("   Too Early!");
+        break;
+    case 6: // ready to start again
+        if (!btn0) {
+            state = 0;
+        }
         break;
     default:
         state = 0;
