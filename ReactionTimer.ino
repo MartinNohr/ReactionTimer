@@ -16,6 +16,7 @@ TFT_eSPI tft = TFT_eSPI();       // Invoke custom library
 
 void setup()
 {
+    pinMode(0, INPUT_PULLUP);
     pinMode(TFT_ENABLE, OUTPUT);
     digitalWrite(TFT_ENABLE, 1);
     Serial.begin(115200);
